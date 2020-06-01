@@ -1,3 +1,3 @@
-__all__ = ['imgTools','phsRead','phsTools','signal']
+__all__ = ['imgTools', 'phsRead', 'phsTools', 'signal']
 
 from ritsar import *

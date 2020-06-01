@@ -7,4 +7,4 @@ setup(name='RITSAR',
       author_email='dm6718@g.rit.edu',
       url='https://github.com/dm6718/RITSAR/',
       packages=['ritsar'],
-     )
+      )

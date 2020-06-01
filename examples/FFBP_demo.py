@@ -6,22 +6,24 @@
 #                                                                            #
 ##############################################################################
 
-#Add include directories to default path list
+# Add include directories to default path list
 from sys import path
+
 path.append('../')
 path.append('./dictionaries')
 
-#Include Dictionaries
+# Include Dictionaries
 from SARplatform import plat_dict
 
-#Include standard library dependencies
+# Include standard library dependencies
 import matplotlib.pylab as plt
 from time import time
 
-#Include SARIT toolset
+# Include SARIT toolset
 from ritsar import phsTools
 from ritsar import phsRead
 from ritsar import imgTools
+
 '''
 #simulated FFBP demo
 ##############################################################################
@@ -72,45 +74,48 @@ plt.xlabel('meters'); plt.ylabel('meters')
 plt.tight_layout()
 
 '''
-#AFRL DSBP demo
+# AFRL DSBP demo
 ###############################################################################
-#Define top level directory containing *.mat file
-#and choose polarization and starting azimuth
+# Define top level directory containing *.mat file
+# and choose polarization and starting azimuth
 pol = 'HH'
 directory = './data/AFRL/pass1'
 start_az = 1
 
-#Import phase history and create platform dictionary
-[phs, platform] = phsRead.AFRL(directory, pol, start_az, n_az = 4)
+# Import phase history and create platform dictionary
+[phs, platform] = phsRead.AFRL(directory, pol, start_az, n_az=4)
 
-#Create image plane dictionary
-img_plane = imgTools.img_plane_dict(platform, res_factor = 1.0, upsample = True, aspect = 1.0)
+# Create image plane dictionary
+img_plane = imgTools.img_plane_dict(platform, res_factor=1.0, upsample=True, aspect=1.0)
 
-#full backprojection
+# full backprojection
 start = time()
-img_bp   = imgTools.backprojection(phs, platform, img_plane, taylor = 17, upsample = 2)
-bp_time = time()-start
+img_bp = imgTools.backprojection(phs, platform, img_plane, taylor=17, upsample=2)
+bp_time = time() - start
 
-#Fast-factorized backprojection
+# Fast-factorized backprojection
 start = time()
-img_FFBP = imgTools.FFBP(phs, platform, img_plane, taylor = 17, factor_max = 2)
-fbp_time = time()-start
+img_FFBP = imgTools.FFBP(phs, platform, img_plane, taylor=17, factor_max=2)
+fbp_time = time() - start
 
-#Output image
-u = img_plane['u']; v = img_plane['v']
+# Output image
+u = img_plane['u'];
+v = img_plane['v']
 extent = [u.min(), u.max(), v.min(), v.max()]
 
-plt.subplot(1,2,1)
+plt.subplot(1, 2, 1)
 plt.title('Full Backprojection \n \
-Runtime = %i s'%bp_time)
-imgTools.imshow(img_bp, dB_scale = [-30,0], extent = extent)
-plt.xlabel('meters'); plt.ylabel('meters')
+Runtime = %i s' % bp_time)
+imgTools.imshow(img_bp, dB_scale=[-30, 0], extent=extent)
+plt.xlabel('meters');
+plt.ylabel('meters')
 
-plt.subplot(1,2,2)
+plt.subplot(1, 2, 2)
 plt.title('Fast Factorized Backprojection \n \
-Runtime = %i s'%fbp_time)
-imgTools.imshow(img_FFBP, dB_scale = [-30,0], extent = extent)
-plt.xlabel('meters'); plt.ylabel('meters')
+Runtime = %i s' % fbp_time)
+imgTools.imshow(img_FFBP, dB_scale=[-30, 0], extent=extent)
+plt.xlabel('meters');
+plt.ylabel('meters')
 plt.tight_layout()
 '''
 #DIRSIG DSBP demo

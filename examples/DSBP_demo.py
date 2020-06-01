@@ -6,22 +6,24 @@
 #                                                                            #
 ##############################################################################
 
-#Add include directories to default path list
+# Add include directories to default path list
 from sys import path
+
 path.append('../')
 path.append('./dictionaries')
 
-#Include Dictionaries
+# Include Dictionaries
 from SARplatform import plat_dict
 
-#Include standard library dependencies
+# Include standard library dependencies
 import matplotlib.pylab as plt
 import numpy as np
 
-#Include SARIT toolset
+# Include SARIT toolset
 from ritsar import phsTools
 from ritsar import phsRead
 from ritsar import imgTools
+
 '''
 #simulated DSBP demo
 ##############################################################################
@@ -68,41 +70,44 @@ plt.xlabel('meters'); plt.ylabel('meters')
 plt.tight_layout()
 
 '''
-#AFRL DSBP demo
+# AFRL DSBP demo
 ###############################################################################
-#Define top level directory containing *.mat file
-#and choose polarization and starting azimuth
+# Define top level directory containing *.mat file
+# and choose polarization and starting azimuth
 pol = 'HH'
 directory = './data/AFRL/pass1'
 start_az = 1
 
-#Import phase history and create platform dictionary
-[phs, platform] = phsRead.AFRL(directory, pol, start_az, n_az = 3)
+# Import phase history and create platform dictionary
+[phs, platform] = phsRead.AFRL(directory, pol, start_az, n_az=3)
 
-#Create image plane dictionary
-img_plane = imgTools.img_plane_dict(platform, res_factor = 1.4, upsample = True, aspect = 1.0)
+# Create image plane dictionary
+img_plane = imgTools.img_plane_dict(platform, res_factor=1.4, upsample=True, aspect=1.0)
 
-#Apply algorithm of choice to phase history data
-img_bp   = imgTools.backprojection(phs, platform, img_plane, taylor = 17, upsample = 2)
+# Apply algorithm of choice to phase history data
+img_bp = imgTools.backprojection(phs, platform, img_plane, taylor=17, upsample=2)
 N = 128
-img_DSBP = imgTools.DSBP(phs, platform, img_plane, center = [-15-0.6,22-0.4,0], size = [N,N])
+img_DSBP = imgTools.DSBP(phs, platform, img_plane, center=[-15 - 0.6, 22 - 0.4, 0], size=[N, N])
 
-#Output image
-du = img_plane['du']; dv = img_plane['dv']
-#u = img_plane['u']; v = img_plane['v']
-u = np.arange(-N/2,N/2)*du
-v = np.arange(-N/2,N/2)*dv
+# Output image
+du = img_plane['du'];
+dv = img_plane['dv']
+# u = img_plane['u']; v = img_plane['v']
+u = np.arange(-N / 2, N / 2) * du
+v = np.arange(-N / 2, N / 2) * dv
 extent = [u.min(), u.max(), v.min(), v.max()]
 
-plt.subplot(1,2,1)
+plt.subplot(1, 2, 1)
 plt.title('Full Backprojection')
-imgTools.imshow(img_bp[177-N//2:177+N//2,202-N//2:202+N//2], dB_scale = [-25,0], extent = extent)
-plt.xlabel('meters'); plt.ylabel('meters')
+imgTools.imshow(img_bp[177 - N // 2:177 + N // 2, 202 - N // 2:202 + N // 2], dB_scale=[-25, 0], extent=extent)
+plt.xlabel('meters');
+plt.ylabel('meters')
 
-plt.subplot(1,2,2)
+plt.subplot(1, 2, 2)
 plt.title('Digital Spotlight Backprojection')
-imgTools.imshow(img_DSBP, dB_scale = [-25,0], extent = extent)
-plt.xlabel('meters'); plt.ylabel('meters')
+imgTools.imshow(img_DSBP, dB_scale=[-25, 0], extent=extent)
+plt.xlabel('meters');
+plt.ylabel('meters')
 plt.tight_layout()
 '''
 #DIRSIG DSBP demo
